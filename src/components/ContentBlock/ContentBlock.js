@@ -7,7 +7,11 @@ function ContentBlock() {
     const [words, setWords] = useState(wordsList)
     return (
         <div className={style.content}>
-            {words.map((word, index) => <Card key={index} {...word} />)}
+            <h1>Начать учить Английский просто</h1>
+            <p>Кликай по карточкам и узнавай новые слова быстро и легко!</p>
+            <div className={style.cards}>
+                {words.map((word, index) => <Card key={index} {...word} />)} 
+            </div>
         </div>
     )
 }

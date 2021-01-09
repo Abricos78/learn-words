@@ -43,4 +43,8 @@ export const wordsList = [
         eng: 'leave',
         rus: 'покидать'
     },
+    {
+        eng: 'obviously',
+        rus: 'очевидно'
+    },
 ];

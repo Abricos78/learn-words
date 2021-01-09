@@ -1,5 +1,15 @@
 .content {
-    background-color: white;
-    z-index: 1;
-    display: block;
+    background-color: lightgray;
+    text-align: center;
+    margin: 0px auto;
+    padding: 40px;
+}
+
+.cards {
+    justify-content: center;
+    margin: 20px auto;
+    padding-left: 45px;
+    max-width: 700px;
+    display: flex;
+    flex-wrap: wrap;
 }

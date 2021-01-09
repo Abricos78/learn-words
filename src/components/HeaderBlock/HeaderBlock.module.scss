@@ -33,9 +33,10 @@
     }
 
     .header {
-        font-size: 68px;
+        font-size: 40px;
         color: white;
         padding: 24px 0;
+        letter-spacing: 1px;
     }
 
     .descr {
@@ -43,5 +44,16 @@
         padding: 15px 0 30px 0;
         font-size: 20px;
         line-height: 1.55;
+    }
+    .btn {
+        background-color: transparent;
+        color: white;
+        transition: all ease .8s;
+        padding: 15px 30px;
+        border-radius: 30px;
+        border: 1.5px solid black;
+    }
+    .btn:hover {
+        background-color: black;
     }
 }
