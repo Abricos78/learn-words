@@ -2,14 +2,21 @@
     background-color: lightgray;
     text-align: center;
     margin: 0px auto;
-    padding: 40px;
+    padding: 90px;
 }
 
 .cards {
-    justify-content: center;
     margin: 20px auto;
-    padding-left: 45px;
-    max-width: 700px;
+    /* padding-left: 10%; */
+    max-width: 900px;
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+.form {
+    max-width: 700px;
+    margin: 30px auto;
+    /* margin-bottom: 40px; */
 }
