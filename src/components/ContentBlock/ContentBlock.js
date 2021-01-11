@@ -1,47 +1,97 @@
-import { Input } from 'antd'
+import { Form ,Button, Input } from 'antd'
+// import Form from 'antd/lib/form/Form'
 import React, { useState } from 'react'
+import { getWords } from '../../api/getWords'
 import { wordsList } from '../../data/wordList'
 import Card from './CardList/Card'
 import style from './ContentBlock.module.css'
 
 const { Search } = Input
 
-function ContentBlock() {
-    const [words, setWords] = useState(wordsList)
-    const [value, setValue] = useState('')
+class ContentBlock extends React.Component {
 
-    const handlerDeleteClick = id => {
-        setWords(words.filter(word => word.id !== id))
+    state = {
+        words: wordsList,
+        value: '',
+        loading: false
     }
 
-    const handleSubmit = e => {
-        setValue('')
+    handlerDeleteClick = id => {
+        this.setState({
+            words: this.state.words.filter(word => word.id !== id)
+        })
     }
-    return (
-        <div className={style.content}>
-            <h1>Начать учить Английский просто</h1>
-            <p>Кликай по карточкам и узнавай новые слова быстро и легко!</p>
-            <div className={style.form}>
-                <Search
-                    placeholder="input search text"
-                    enterButton="Search"
-                    size="large"
-                    // suffix={suffix}
-                    onChange={e => setValue(e.target.value)}
-                    onSearch={handleSubmit}
-                />
-            </div>
 
+    handlerSetValue = value => {
+        console.log(value)
+        this.setState({
+            value
+        })
+    }
 
-            {/* <form onSubmit={handleSubmit}>
-                <input type='text' value={value} onChange={e => setValue(e.target.value)} />
-                <button >Узнать перевод</button>
-            </form> */}
-            <div className={style.cards}>
-                {words.map((word) => <Card deleteItem={handlerDeleteClick} key={word.id} {...word} />)} 
+    getTranslate = async ({eng, rus}) => {
+        await getWords(eng)
+        this.setState({
+            loading: false
+        })
+    }
+
+    handlerSubmit = values => {
+        this.setState({
+            loading: true
+        }, this.getTranslate)
+
+        this.props.formRef.current.resetFields()
+    }
+
+    render() {
+        return (
+            <div className={style.content}>
+                <h1>Начать учить Английский просто</h1>
+                <p>Кликай по карточкам и узнавай новые слова быстро и легко!</p>
+                <div className={style.form}>
+                    {/* <Search
+                        ref={this.props.inputRef}
+                        placeholder="input search text"
+                        enterButton="Search"
+                        size="large"
+                        // suffix={suffix}
+                        onChange={e => this.handlerSetValue(e.target.value)}
+                        onSearch={this.handlerSubmit}
+                        value={this.state.value}
+                    /> */}
+                    <Form ref={this.props.formRef} onFinish={this.handlerSubmit} layout='inline'>
+                            <Form.Item
+                                label='English Word:'
+                                name='eng'
+                            >
+                                <Input ref={this.props.inputRef} />
+                            </Form.Item>
+                        
+                            <Form.Item
+                                label='Русское Слово:'
+                                name='rus'
+                            >
+                                <Input />
+                            </Form.Item>
+                        <Form.Item >
+                            <Button htmlType='submit' loading={this.state.loading}>Добавить</Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+    
+    
+                {/* <form onSubmit={handleSubmit}>
+                    <input type='text' value={value} onChange={e => setValue(e.target.value)} />
+                    <button >Узнать перевод</button>
+                </form> */}
+                <div className={style.cards}>
+                    {this.state.words.map((word) => <Card deleteItem={this.handlerDeleteClick} key={word.id} {...word} />)} 
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
+
 }
 
 export default ContentBlock
