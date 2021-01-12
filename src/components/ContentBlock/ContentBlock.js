@@ -1,8 +1,7 @@
 import { Form ,Button, Input } from 'antd'
-// import Form from 'antd/lib/form/Form'
 import React, { useState } from 'react'
 import { getWords } from '../../api/getWords'
-import { wordsList } from '../../data/wordList'
+import { database } from '../../firebase'
 import Card from './CardList/Card'
 import style from './ContentBlock.module.css'
 
@@ -11,10 +10,30 @@ const { Search } = Input
 class ContentBlock extends React.Component {
 
     state = {
-        words: wordsList,
+        words: [],
         value: '',
         loading: false
     }
+
+    componentDidMount() {
+        database.ref('/cards').once('value')
+        .then(res => {
+            this.setState({
+                words: res.val()
+            })
+        })
+        
+    }
+
+    setNewWord = () => {
+        database.ref('/cards').set([...this.state.words, {
+            id: +new Date(),
+            eng: 'house',
+            rus: 'дом'
+        }])
+    }
+
+    
 
     handlerDeleteClick = id => {
         this.setState({
@@ -37,10 +56,10 @@ class ContentBlock extends React.Component {
     }
 
     handlerSubmit = values => {
-        this.setState({
-            loading: true
-        }, this.getTranslate)
-
+        // this.setState({
+        //     loading: true
+        // }, this.getTranslate)
+        this.setNewWord()
         this.props.formRef.current.resetFields()
     }
 
