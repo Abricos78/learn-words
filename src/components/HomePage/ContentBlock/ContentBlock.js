@@ -1,11 +1,10 @@
 import { Form ,Button, Input } from 'antd'
 import React, { useState } from 'react'
-import { getWords } from '../../api/getWords'
-import { database } from '../../firebase'
+import { getWords } from '../../../api/getWords'
+import { database } from '../../../firebase'
 import Card from './CardList/Card'
 import style from './ContentBlock.module.css'
 
-const { Search } = Input
 
 class ContentBlock extends React.Component {
 
@@ -15,30 +14,31 @@ class ContentBlock extends React.Component {
         loading: false
     }
 
+    
+
     componentDidMount() {
-        database.ref('/cards').once('value')
-        .then(res => {
+        database.ref(`/cards/${this.props.userId}`).on('value', res => {
             this.setState({
-                words: res.val()
+                words: res.val() || []
             })
         })
         
     }
 
-    setNewWord = () => {
-        database.ref('/cards').set([...this.state.words, {
+    setNewWord = (eng, rus) => {
+        debugger
+        database.ref(`/cards/${this.props.userId}`).set([...this.state.words, {
             id: +new Date(),
-            eng: 'house',
-            rus: 'дом'
+            eng,
+            rus
         }])
     }
 
     
 
     handlerDeleteClick = id => {
-        this.setState({
-            words: this.state.words.filter(word => word.id !== id)
-        })
+        
+        database.ref(`/cards/${this.props.userId}`).set(this.state.words.filter(word => word.id !== id))
     }
 
     handlerSetValue = value => {
@@ -53,13 +53,15 @@ class ContentBlock extends React.Component {
         this.setState({
             loading: false
         })
+        this.setNewWord(eng, rus)
     }
 
-    handlerSubmit = values => {
+    handleSubmit = ({eng, rus}) => {
+        debugger
         // this.setState({
         //     loading: true
         // }, this.getTranslate)
-        this.setNewWord()
+        this.setNewWord(eng, rus)
         this.props.formRef.current.resetFields()
     }
 
@@ -69,17 +71,7 @@ class ContentBlock extends React.Component {
                 <h1>Начать учить Английский просто</h1>
                 <p>Кликай по карточкам и узнавай новые слова быстро и легко!</p>
                 <div className={style.form}>
-                    {/* <Search
-                        ref={this.props.inputRef}
-                        placeholder="input search text"
-                        enterButton="Search"
-                        size="large"
-                        // suffix={suffix}
-                        onChange={e => this.handlerSetValue(e.target.value)}
-                        onSearch={this.handlerSubmit}
-                        value={this.state.value}
-                    /> */}
-                    <Form ref={this.props.formRef} onFinish={this.handlerSubmit} layout='inline'>
+                    <Form ref={this.props.formRef} onFinish={this.handleSubmit} layout='inline'>
                             <Form.Item
                                 label='English Word:'
                                 name='eng'
@@ -94,16 +86,10 @@ class ContentBlock extends React.Component {
                                 <Input />
                             </Form.Item>
                         <Form.Item >
-                            <Button htmlType='submit' loading={this.state.loading}>Добавить</Button>
+                            <Button type='primary' htmlType='submit' loading={this.state.loading}>Добавить</Button>
                         </Form.Item>
                     </Form>
                 </div>
-    
-    
-                {/* <form onSubmit={handleSubmit}>
-                    <input type='text' value={value} onChange={e => setValue(e.target.value)} />
-                    <button >Узнать перевод</button>
-                </form> */}
                 <div className={style.cards}>
                     {this.state.words.map((word) => <Card deleteItem={this.handlerDeleteClick} key={word.id} {...word} />)} 
                 </div>
