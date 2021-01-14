@@ -14,11 +14,30 @@ const firebaseConfig = {
   };
 
 
-firebase.initializeApp(firebaseConfig)
+class Firebase {
+    constructor() {
+    	firebase.initializeApp(firebaseConfig)
+		this.auth = firebase.auth()
+		this.database = firebase.database()
 
-export const fire = firebase
+		this.userUid = null
+	}
 
-export const database = firebase.database()
+	setUserUid = uid => this.userUid = uid
+	
+	signWithEmail = (email, password) => this.auth.signInWithEmailAndPassword(email, password)
+
+	getUserWords = () => this.database.ref(`/cards/${this.userUid}`)
+
+	registerUser = (email, password) => this.auth.createUserWithEmailAndPassword(email, password)
+
+	setUserWords = words => this.database.ref(`/cards/${this.userUid}`).set(words)
+}
+
+export default Firebase
+
+
+
 
 
 

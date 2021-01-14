@@ -4,6 +4,9 @@ import LoginPage from './components/LoginPage/LoginPage';
 import HomePage from './components/HomePage/HomePage';
 import { fire } from './firebase';
 import { Spin } from 'antd';
+import FirebaseContext from './firebaseContext';
+import { Route, Switch } from 'react-router-dom';
+import Register from './components/RegisterPage/Register';
 
 class App extends React.Component {
 
@@ -12,12 +15,15 @@ class App extends React.Component {
 	}
 	
 	componentDidMount() {
-		fire.auth().onAuthStateChanged(user => {
+		const { auth, setUserUid } = this.context
+		auth.onAuthStateChanged(user => {
 			if (user) {
+				setUserUid(user.uid)
 				this.setState({
 					user
 				})
 			} else {
+				setUserUid(null)
 				this.setState({
 					user: false
 				})
@@ -38,14 +44,22 @@ class App extends React.Component {
 				{this.state.user ?
 					<HomePage user={this.state.user} formRef={this.formRef} inputRef={this.inputRef} />
 				:
-					<LoginPage />
+					<Switch>
+						<Route path='/register'>
+							<Register />
+						</Route>
+						<LoginPage />
+					</Switch>
 				}
+
+
 			</div>
 			
 		);
 	}
 
-
 }
+
+App.contextType = FirebaseContext
 
 export default App;

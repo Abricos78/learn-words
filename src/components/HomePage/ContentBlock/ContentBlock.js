@@ -2,6 +2,7 @@ import { Form ,Button, Input } from 'antd'
 import React, { useState } from 'react'
 import { getWords } from '../../../api/getWords'
 import { database } from '../../../firebase'
+import FirebaseContext from '../../../firebaseContext'
 import Card from './CardList/Card'
 import style from './ContentBlock.module.css'
 
@@ -17,7 +18,8 @@ class ContentBlock extends React.Component {
     
 
     componentDidMount() {
-        database.ref(`/cards/${this.props.userId}`).on('value', res => {
+        const { getUserWords } = this.context
+        getUserWords().on('value', res => {
             this.setState({
                 words: res.val() || []
             })
@@ -26,8 +28,8 @@ class ContentBlock extends React.Component {
     }
 
     setNewWord = (eng, rus) => {
-        debugger
-        database.ref(`/cards/${this.props.userId}`).set([...this.state.words, {
+        const { setUserWords } = this.context
+        setUserWords([...this.state.words, {
             id: +new Date(),
             eng,
             rus
@@ -37,8 +39,8 @@ class ContentBlock extends React.Component {
     
 
     handlerDeleteClick = id => {
-        
-        database.ref(`/cards/${this.props.userId}`).set(this.state.words.filter(word => word.id !== id))
+        const { setUserWords } = this.context
+        setUserWords(this.state.words.filter(word => word.id !== id))
     }
 
     handlerSetValue = value => {
@@ -98,5 +100,7 @@ class ContentBlock extends React.Component {
     }
 
 }
+
+ContentBlock.contextType = FirebaseContext
 
 export default ContentBlock
