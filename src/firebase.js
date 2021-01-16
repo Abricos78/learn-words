@@ -31,7 +31,9 @@ class Firebase {
 
 	registerUser = (email, password) => this.auth.createUserWithEmailAndPassword(email, password)
 
-	setUserWords = words => this.database.ref(`/cards/${this.userUid}`).set(words)
+  setUserWords = words => this.database.ref(`/cards/${this.userUid}`).set(words)
+  
+  signOut = () => this.auth.signOut()
 }
 
 export default Firebase
