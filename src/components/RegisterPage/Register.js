@@ -1,14 +1,7 @@
 import React from 'react'
 import style from './Register.module.css'
-import {
-    Alert,
-    Button,
-    Form,
-    Input
-} from 'antd'
-import {
-    Link
-} from 'react-router-dom';
+import { Button, Form, Input } from 'antd'
+import { Link } from 'react-router-dom';
 import FirebaseContext from '../../firebaseContext';
 
 class Register extends React.PureComponent {
@@ -21,7 +14,6 @@ class Register extends React.PureComponent {
         
         setUserUid(user.uid)
         history.push('/')
-
     }
 
     render() {
@@ -84,7 +76,6 @@ class Register extends React.PureComponent {
             </div>
         )
     }
-
 }
 
 Register.contextType = FirebaseContext

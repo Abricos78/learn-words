@@ -8,7 +8,6 @@ const { Header } = Layout;
 
 class Navbar extends React.PureComponent {
 
-
     handleExit = () => {
         const { signOut, setUserUid} = this.context
         setUserUid(null)
@@ -36,11 +35,9 @@ class Navbar extends React.PureComponent {
                         </Menu>
                     </Header>
                 </Layout>
-    
             </div>
         )
     }
-
 }
 
 Navbar.contextType = FirebaseContext

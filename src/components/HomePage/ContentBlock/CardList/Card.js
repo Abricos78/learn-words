@@ -41,13 +41,10 @@ function Card({eng, rus, id, deleteItem}) {
                                 <div className={style.cardBack}>
                                     {rus}
                                 </div>
-                    
                     }
-
                 </div>
             </div>
         </div>
-
     )
 }
 

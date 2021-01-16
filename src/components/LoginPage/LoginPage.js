@@ -6,6 +6,7 @@ import style from './Login.module.css'
 import { Link } from 'react-router-dom';
 
 class LoginPage extends React.PureComponent {
+
     state = {
         errorMsg: null
     }
@@ -15,12 +16,11 @@ class LoginPage extends React.PureComponent {
         const { history } = this.props
 
         let response = await signWithEmail(email, password)
-        
+
         if (response.user.uid) {
             setUserUid(response.user.uid)
             history.push('/')
         } else {
-            console.log('Error message: ', response.message)
             this.setState({
                 errorMsg: response.message
             })
@@ -38,17 +38,18 @@ class LoginPage extends React.PureComponent {
     }
 
     render() {
+        const { errorMsg } = this.state
 
-        if (this.state.errorMsg) {
-            return <div className={style.alert}>
-            <Alert
-                message="Error Text"
-                description={this.state.errorMsg}
-                type="error"
-            />
+        if (errorMsg) {
+            return (
+            <div className={style.alert}>
+                <Alert
+                    message="Error Text"
+                    description={errorMsg}
+                    type="error"
+                />
             </div>
-
-        }
+        )}
 
         return (
             <div className={style.loginPage}>
@@ -88,7 +89,6 @@ class LoginPage extends React.PureComponent {
                             placeholder="Password"
                         />
                     </Form.Item>
-
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className={style.loginFormButton}>
                             Log in
@@ -100,10 +100,9 @@ class LoginPage extends React.PureComponent {
             </div>
         )
     }
-
 }
-LoginPage.contextType = FirebaseContext
 
+LoginPage.contextType = FirebaseContext
 
 export default LoginPage
 

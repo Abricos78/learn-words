@@ -17,6 +17,7 @@ class App extends React.Component {
 	
 	componentDidMount() {
 		const { auth, setUserUid } = this.context
+
 		auth.onAuthStateChanged(user => {
 			if (user) {
 				setUserUid(user.uid)
@@ -30,24 +31,29 @@ class App extends React.Component {
 		})
 	}
 
-	formRef = React.createRef()
-	inputRef = React.createRef()
-	
+	// formRef = React.createRef()
+	// inputRef = React.createRef()
+
 	render() {
-		if (this.state.user === null) {
+		const { user } = this.state
+		const formRef = React.createRef()
+		const inputRef = React.createRef()
+
+		if (user === null) {
 			return <div className='preloader'>
 				<Spin size='large' tip='Loading...'/>
 			</div>
 		}
+		
 		return (
 			<div>
-				{this.state.user ?
+				{user ?
 					<>
 						<Navbar />
 						<Switch>
 							<Route path='/about' render={() => <h1>Hello</h1>} />
 							<Route path='/contact' render={() => <h1>Hello</h1>} />
-							<Route path='/' x render={(props) => <HomePage user={this.state.user} formRef={this.formRef} inputRef={this.inputRef} {...props} />} />
+							<Route path='/' x render={(props) => <HomePage user={user} formRef={formRef} inputRef={inputRef} {...props} />} />
 						</Switch>
 					</>
 				:
@@ -56,13 +62,9 @@ class App extends React.Component {
 						<Route path='/' component={LoginPage} />
 					</Switch>
 				}
-
-
 			</div>
-			
 		);
 	}
-
 }
 
 App.contextType = FirebaseContext
