@@ -5,7 +5,7 @@ let initialize = axios.create({
     auth: API_KEY
 })
 
-export let getWords = (text, lang = 'en-ru') => {
-    initialize.get(`https://reactmarathon-api.netlify.app/api/translate?text=${text}&lang=${lang}`)
-    .then(response => response.data)
+export let getWords = async (text, lang = 'en-ru') => {
+    let response = await initialize.get(`https://reactmarathon-api.netlify.app/api/translate?text=${text}&lang=${lang}`)
+    return response.data
 }
