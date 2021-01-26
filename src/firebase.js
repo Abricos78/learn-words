@@ -13,35 +13,20 @@ const firebaseConfig = {
     measurementId: "G-XRWP42E15F"
   };
 
-
-class Firebase {
-    constructor() {
-    	firebase.initializeApp(firebaseConfig)
-		this.auth = firebase.auth()
-		this.database = firebase.database()
-
-		this.userUid = null
-	}
-
-	setUserUid = uid => this.userUid = uid
+firebase.initializeApp(firebaseConfig)
 	
-	signWithEmail = (email, password) => this.auth.signInWithEmailAndPassword(email, password)
+const auth = firebase.auth()
+const database = firebase.database()
 
-	getUserWords = () => this.database.ref(`/cards/${this.userUid}`)
+export const signWithEmail = (email, password) => auth.signInWithEmailAndPassword(email, password)
 
-	registerUser = (email, password) => this.auth.createUserWithEmailAndPassword(email, password)
+export const getUserWords = (userUid) => database.ref(`/cards/${userUid}`)
 
-  setUserWords = words => this.database.ref(`/cards/${this.userUid}`).set(words)
+export const registerUser = (email, password) => auth.createUserWithEmailAndPassword(email, password)
+
+export const setUserWords = (words, userUid) => database.ref(`/cards/${userUid}`).set(words)
   
-  signOut = () => this.auth.signOut()
-}
-
-export default Firebase
-
-
-
-
-
+export const signOut = () => auth.signOut()
 
 
 

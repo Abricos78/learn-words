@@ -1,5 +1,8 @@
-const SET_USER_WORD = 'SET_USER_WORD',
-    SET_LOADING = 'SET_LOADING'
+import { getUserWords } from '../firebase.js'
+
+const SET_WORD = 'SET_USER_WORD',
+    SET_LOADING = 'SET_LOADING',
+    GET_WORDS = 'GET_WORDS'
 
 let initialState = {
     words: [],
@@ -9,7 +12,7 @@ let initialState = {
 
 export let wordsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_USER_WORD:
+        case SET_WORD:
             return {
                 ...state,
                 words: [...words, action.word]
@@ -24,9 +27,16 @@ export let wordsReducer = (state = initialState, action) => {
     }
 }
 
-export let setUserWord = word => {
+const getWords = words => {
     return {
-        type: SET_USER_WORD,
+        type: GET_WORDS,
+        words
+    }
+}
+
+export let setWord = word => {
+    return {
+        type: SET_WORD,
         word
     }
 }
@@ -35,6 +45,19 @@ export let setLoading = loading => {
     return {
         type: SET_LOADING,
         loading
+    }
+}
+
+export let getUserWordsThunk = userUid => async dispatch => {
+    let words = await getUserWords(userUid)
+    dispatch(getWords(words))
+}
+
+export let setUserWordThunk = () => async dispatch => {
+    let newWord = {
+        id: +new Date(),
+        eng,
+        rus
     }
 }
 
