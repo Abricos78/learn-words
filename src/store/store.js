@@ -1,12 +1,10 @@
-import { applyMiddleware, combineReducers, createStore } from "redux";
-import thunk from "redux-thunk";
+import { combineReducers, createStore } from "redux";
 import { userReducer } from "../reducers/userReducer";
-import { userWordsReducer } from "../reducers/userWordsReducer";
+import { wordsReducer } from "../reducers/wordsReducer";
 
 let reducers = combineReducers({
     user: userReducer,
-    words: userWordsReducer
+    words: wordsReducer
 })
 
-
-export let store = createStore(reducers, applyMiddleware(thunk))
+export let store = createStore(reducers)
